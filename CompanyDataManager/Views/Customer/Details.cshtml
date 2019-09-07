@@ -1,0 +1,17 @@
+﻿@model CompanyDataManager.Models.Customer
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+
+    <div>@Html.DisplayFor(model => model.Id)</div>
+    <div>@Html.DisplayFor(model => model.FirstName)</div>
+    <div>@Html.DisplayFor(model => model.LastName)</div>
+    <div>@Html.DisplayFor(model => model.PhoneNumber)</div>
+    <div>@Html.DisplayFor(model => model.HomeAddress)</div>
+    <div>@Html.DisplayFor(model => model.Email)</div>
+
+
