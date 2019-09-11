@@ -18,25 +18,20 @@ namespace CompanyDataManager.Controllers
         private IMapper mapper = AutomapperHelper.ConfigureAutomapper();
 
         // GET: Customer
-        public ActionResult Index()
+        public JsonResult GetCustomers()
         {
-
             CustomerData data = new CustomerData();
 
             var output = data.GetCustomers().ToList();
 
             var customers = mapper.Map<List<Customer>>(output);
 
-            return View(customers);
+            return Json(customers, JsonRequestBehavior.AllowGet);
         }
 
-        // GET: Customer/Details/5
-        public ActionResult Details(int? id)
+        [HttpGet]
+        public JsonResult Details(int? id)
         {
-            if(id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
 
             CustomerData data = new CustomerData();
 
@@ -44,69 +39,42 @@ namespace CompanyDataManager.Controllers
 
             var customer = mapper.Map<Customer>(output);
 
-            return View(customer);
+            return Json(customer, JsonRequestBehavior.AllowGet);
         }
 
-        // GET: /Customer/Create  
-        [HttpGet]
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: /Customer/Create
         [HttpPost]
-        public ActionResult Create([Bind(Include = "FirstName, LastName, PhoneNumber, HomeAddress, Email")]Customer customer)
+        public JsonResult Create(Customer customer)
         {
-            CustomerData data = new CustomerData();
-            data.SaveCustomer(mapper.Map<CustomerModel>(customer));
-            return RedirectToAction(nameof(Index));
-        }
-
-        // GET: /Customer/Edit/id
-        [HttpGet]
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
+            if (ModelState.IsValid)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                CustomerData data = new CustomerData();
+                data.SaveCustomer(mapper.Map<CustomerModel>(customer));
             }
 
-            CustomerData data = new CustomerData();
-
-            var output = data.GetCustomerById(id).FirstOrDefault();
-
-            var customer = mapper.Map<Customer>(output);
-
-            return View(customer);
+            return Json(null);
         }
 
-        // POST: /Customer/Edit/id
         [HttpPost]
-        public ActionResult Edit(int id, [Bind(Include = "Id, FirstName, LastName, PhoneNumber, HomeAddress, Email")]Customer customer)
+        public JsonResult Edit(Customer customer)
         {
-            if (id == null)
+            if (ModelState.IsValid)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                CustomerData data = new CustomerData();
+
+                data.UpdateCustomer(mapper.Map<CustomerModel>(customer));
             }
 
-            CustomerData data = new CustomerData();
-
-            data.UpdateCustomer(mapper.Map<CustomerModel>(customer));
-
-            return RedirectToAction(nameof(Index));
+            return Json(null);
         }
 
-        //GET: /Customer/Delete/id
-        [HttpGet]
-        public ActionResult Delete(int id)
+        [HttpPost]
+        public JsonResult Delete(int id)
         {
-
             CustomerData data = new CustomerData();
 
             data.DeleteCustomer(id);
 
-            return RedirectToAction(nameof(Index));
+            return Json(null);
         }
     }
 }

@@ -20,43 +20,36 @@ namespace CompanyEFDataManager.Controllers
             context = new CompanyDataEntities();
         }
         
-        // GET: Customer
-        public ActionResult Index()
+        
+        public JsonResult GetCustomers()
         {
             var customers = context.Customers.ToList();
-            return View(customers);
+            return Json(customers, JsonRequestBehavior.AllowGet);
         }
 
-        // GET: Customer/Details/5
-        public ActionResult Details(int? id)
+        
+        public JsonResult Details(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
             var customer = context.Customers.Where(i => i.Id == id).FirstOrDefault();
 
-            return View(customer);
+            return Json(customer,JsonRequestBehavior.AllowGet);
         }
 
-        // GET: /Customer/Create  
-        [HttpGet]
-        public ActionResult Create()
-        {
-            return View();
-        }
 
-        // POST: /Customer/Create
+        
         [HttpPost]
-        public async Task<ActionResult> Create([Bind(Include = "FirstName, LastName, PhoneNumber, HomeAddress, Email")]Customer customer)
+        public async Task<JsonResult> Create(Customer customer)
         {
-            context.Customers.Add(customer);
-            await context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            if (ModelState.IsValid)
+            {
+                context.Customers.Add(customer);
+                await context.SaveChangesAsync();
+            }
+            
+            return Json(null);
         }
 
-        // GET: /Customer/Edit/id
+        
         [HttpGet]
         public async Task<ActionResult> Edit(int? id)
         {
@@ -70,16 +63,11 @@ namespace CompanyEFDataManager.Controllers
             return View(customer);
         }
 
-        // POST: /Customer/Edit/id
+        
         [HttpPost]
-        public ActionResult Edit(int id, [Bind(Include = "Id, FirstName, LastName, PhoneNumber, HomeAddress, Email")]Customer customer)
+        public ActionResult Edit(Customer customer)
         {
-            if (id != customer.Id)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var customerToUpdate = context.Customers.Find(id);
+            var customerToUpdate = context.Customers.Find(customer.Id);
             if (TryUpdateModel(customerToUpdate, "",
                new string[] { "FirstName", "LastName", "PhoneNumber","HomeAddress", "Email" }))
             {
@@ -93,11 +81,11 @@ namespace CompanyEFDataManager.Controllers
                 }
             }
 
-                return RedirectToAction(nameof(Index));
+                return Json(null);
         }
 
-        //GET: /Customer/Delete/id
-        [HttpGet]
+        
+        [HttpPost]
         public ActionResult Delete(int id)
         {
             try
@@ -111,7 +99,7 @@ namespace CompanyEFDataManager.Controllers
                 throw;
             }
 
-            return RedirectToAction(nameof(Index));
+            return Json(null);
         }
     }
 }

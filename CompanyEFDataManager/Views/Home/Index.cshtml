@@ -1,31 +1,238 @@
 ﻿@{
     ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h1>Customers</h1>
+            <br />
+        </div>
+        @*add form modal*@
+        <div class="modal" id="addModal" tabindex="-1">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button class="close" data-dismiss="modal" ng-click="clearForm()">&times;</button>
+                        <h4 class="modal-title">Add a new Customer</h4>
+                    </div>
+                    <form class="form-horizontal" name="addForm" novalidate>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="control-label col-md-2" for="FirstName">First Name</label>
+                                <div class="col-md-10">
+                                    <input class="form-control text-box single-line" ng-model="customer.FirstName" id="FirstName" name="FirstName" type="text" value="" ng-minlength="3" ng-maxlength="35" ng-pattern="/^[a-zA-Z]*$/" required />
+                                    <span style="color:red" ng-show="addForm.FirstName.$dirty && addForm.FirstName.$invalid">
+                                        <span ng-show="addForm.FirstName.$error.required">First Name is required.</span>
+                                        <span ng-show="addForm.FirstName.$error.minlength">First Name is too short.</span>
+                                        <span ng-show="addForm.FirstName.$error.maxlength">First Name is too long.</span>
+                                        <span ng-show="addForm.FirstName.$error.pattern">First Name can't include numbers or special characters.</span>
+                                    </span>
+                                </div>
+                            </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+                            <div class="form-group">
+                                <label class="control-label col-md-2" for="LastName">Last Name</label>
+                                <div class="col-md-10">
+                                    <input class="form-control text-box single-line" ng-model="customer.LastName" id="LastName" name="LastName" type="text" value="" ng-minlength="3" ng-maxlength="35" ng-pattern="/^[a-zA-Z]*$/" required />
+                                    <span style="color:red" ng-show="addForm.LastName.$dirty && addForm.LastName.$invalid">
+                                        <span ng-show="addForm.LastName.$error.required">Last Name is required.</span>
+                                        <span ng-show="addForm.LastName.$error.minlength">Last Name is too short.</span>
+                                        <span ng-show="addForm.LastName.$error.maxlength">Last Name is too long.</span>
+                                        <span ng-show="addForm.LastName.$error.pattern">Last Name can't include numbers or special characters.</span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-2" for="PhoneNumber">Phone Number</label>
+                                <div class="col-md-10">
+                                    <input class="form-control text-box single-line" ng-model="customer.PhoneNumber" ng-pattern="/^[0-9]*$/" ng-minlength="10" id="PhoneNumber" name="PhoneNumber" type="tel" value="" />
+                                    <span style="color:red" ng-show="addForm.PhoneNumber.$dirty && addForm.PhoneNumber.$invalid">
+                                        <span ng-show="addForm.PhoneNumber.$error.pattern || addForm.PhoneNumber.$error.minlength">Enter a valid phone number.</span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-2" for="HomeAddress">Home Address</label>
+                                <div class="col-md-10">
+                                    <input class="form-control text-box single-line" ng-model="customer.HomeAddress" id="HomeAddress" name="HomeAddress" type="text" value="" required />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-2" for="Email">Email</label>
+                                <div class="col-md-10">
+                                    <input class="form-control text-box single-line" ng-model="customer.Email" id="Email" name="Email" type="email" value="" required />
+                                    <span style="color:red" ng-show="addForm.Email.$dirty && addForm.Email.$invalid">
+                                        <span ng-show="addForm.Email.$error.email">Enter a valid email.</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success" ng-disabled="addForm.$invalid" ng-click="addCustomer(customer)" value="Add">
+                                Add Customer
+                            </button>
+                            <button class="btn btn-primary" data-dismiss="modal" ng-click="clearForm()">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        @*update form modal*@
+        <div class="modal" id="updateModal" tabindex="-1">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Update Customer</h4>
+                    </div>
+                    <form class="form-horizontal" name="updateForm" novalidate>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="control-label col-md-2" for="FirstName">First Name</label>
+                                <div class="col-md-10">
+                                    <input class="form-control text-box single-line" ng-model="customer.FirstName" id="FirstName" name="FirstName" type="text" value="" ng-minlength="3" ng-maxlength="35" ng-pattern="/^[a-zA-Z]*$/" required />
+                                    <span style="color:red" ng-show="updateForm.FirstName.$dirty && updateForm.FirstName.$invalid">
+                                        <span ng-show="updateForm.FirstName.$error.required">First Name is required.</span>
+                                        <span ng-show="updateForm.FirstName.$error.minlength">First Name is too short.</span>
+                                        <span ng-show="updateForm.FirstName.$error.maxlength">First Name is too long.</span>
+                                        <span ng-show="updateForm.FirstName.$error.pattern">First Name can't include numbers or special characters.</span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-2" for="LastName">Last Name</label>
+                                <div class="col-md-10">
+                                    <input class="form-control text-box single-line" ng-model="customer.LastName" id="LastName" name="LastName" type="text" value="" ng-minlength="3" ng-maxlength="35" ng-pattern="/^[a-zA-Z]*$/" required />
+                                    <span style="color:red" ng-show="updateForm.LastName.$dirty && updateForm.LastName.$invalid">
+                                        <span ng-show="updateForm.LastName.$error.required">Last Name is required.</span>
+                                        <span ng-show="updateForm.LastName.$error.minlength">Last Name is too short.</span>
+                                        <span ng-show="updateForm.LastName.$error.maxlength">Last Name is too long.</span>
+                                        <span ng-show="updateForm.LastName.$error.pattern">Last Name can't include numbers or special characters.</span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-2" for="PhoneNumber">Phone Number</label>
+                                <div class="col-md-10">
+                                    <input class="form-control text-box single-line" ng-model="customer.PhoneNumber" ng-pattern="/^[0-9]*$/" ng-minlength="10" id="PhoneNumber" name="PhoneNumber" type="tel" value="" />
+                                    <span style="color:red" ng-show="updateForm.PhoneNumber.$dirty && updateForm.PhoneNumber.$invalid">
+                                        <span ng-show="updateForm.PhoneNumber.$error.pattern || updateForm.PhoneNumber.$error.minlength">Enter a valid phone number.</span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-2" for="HomeAddress">Home Address</label>
+                                <div class="col-md-10">
+                                    <input class="form-control text-box single-line" ng-model="customer.HomeAddress" id="HomeAddress" name="HomeAddress" type="text" value="" required />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-2" for="Email">Email</label>
+                                <div class="col-md-10">
+                                    <input class="form-control text-box single-line" ng-model="customer.Email" id="Email" name="Email" type="email" value="" required />
+                                    <span style="color:red" ng-show="updateForm.Email.$dirty && updateForm.Email.$invalid">
+                                        <span ng-show="updateForm.Email.$error.email">Enter a valid email.</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary" ng-disabled=" updateForm.$invalid || !updateForm.$dirty" ng-click="updateCustomer(customer)" value="Update">
+                                    Update
+                                </button>
+                                <button class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        @*delete confirmation modal*@
+        <div class="modal" id="deleteModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1>Delete Customer</h1>
+                    </div>
+                    <div class="modal-body">
+                        <h4>Are you sure you want to delete {{customer.FirstName}} {{customer.LastName}} from the list?</h4>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-danger" ng-click="deleteCustomer(customer.Id)">Delete</button>
+                        <button class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*customer table*@
+        <div class="panel-body">
+            <button class="btn btn-success" data-target="#addModal" data-toggle="modal" data-backdrop="static" data-keyboard="false" ng-click="clearForm()">Add a new Customer</button>
+            <br />
+            <br />
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="text-center">
+                                Id
+                            </th>
+                            <th class="text-center">
+                                First Name
+                            </th>
+                            <th class="text-center">
+                                Last Name
+                            </th>
+                            <th class="text-center">
+                                Phone Number
+                            </th>
+                            <th class="text-center">
+                                Home Address
+                            </th>
+                            <th class="text-center">
+                                Email
+                            </th>
+                            <th class="text-center" colspan="2">
+                                Options
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="r in customers">
+                            <td style="text-align:center">
+                                {{r.Id}}
+                            </td>
+                            <td style="text-align:center">
+                                {{r.FirstName}}
+                            </td>
+                            <td style="text-align:center">
+                                {{r.LastName}}
+                            </td>
+                            <td style="text-align:center">
+                                {{r.PhoneNumber}}
+                            </td>
+                            <td style="text-align:center">
+                                {{r.HomeAddress}}
+                            </td>
+                            <td style="text-align:center">
+                                {{r.Email}}
+                            </td>
+                            <td><button class="btn btn-link" data-target="#updateModal" data-toggle="modal" data-backdrop="static" data-keyboard="false" ng-click="editCustomer(r.Id)">Edit</button></td>
+                            <td><button class="btn btn-danger" data-target="#deleteModal" data-toggle="modal" data-backdrop="static" data-keyboard="false" ng-click="deleteCustomerRequest(r)">Delete</button></td>
+                        </tr>
+                        <tr ng-if="!customers || customers.length == 0">
+                            <td colspan="6" style="text-align: center">
+                                There are no customers
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>
