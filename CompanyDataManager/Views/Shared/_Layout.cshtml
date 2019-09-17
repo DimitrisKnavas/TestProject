@@ -10,7 +10,9 @@
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/angular")
     @Scripts.Render("~/bundles/angular-route")
-    @Scripts.Render("~/bundles/CustomerClient")
+    <script src="~/app/CustomerClient.js"></script>
+    <script src="~/app/Services/CustomerService.js"></script>
+    <script src="~/app/Controllers/CustomerController.js"></script>
     @RenderSection("scripts", required: false)
 </head>
 <body ng-controller="CustomerController">

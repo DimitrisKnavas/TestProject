@@ -32,8 +32,6 @@ namespace CompanyEFDataManager
             bundles.Add(new StyleBundle("~/bundles/angular-route").Include(
                       "~/Scripts/angular-route.min.js"));
 
-            bundles.Add(new StyleBundle("~/bundles/CustomerClient").Include(
-                      "~/Scripts/CustomerClient.js"));
         }
     }
 }

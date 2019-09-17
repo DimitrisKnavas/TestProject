@@ -223,11 +223,11 @@
                             <td style="text-align:center">
                                 {{r.Email}}
                             </td>
-                            <td><button class="btn btn-link" data-target="#updateModal" data-toggle="modal" data-backdrop="static" data-keyboard="false" ng-click="editCustomer(r.Id)">Edit</button></td>
-                            <td><button class="btn btn-danger" data-target="#deleteModal" data-toggle="modal" data-backdrop="static" data-keyboard="false" ng-click="deleteCustomerRequest(r)">Delete</button></td>
+                            <td style="text-align:center"><button class="btn btn-link" data-target="#updateModal" data-toggle="modal" data-backdrop="static" data-keyboard="false" ng-click="editCustomer(r.Id)">Edit</button></td>
+                            <td style="text-align:center"><button class="btn btn-danger" data-target="#deleteModal" data-toggle="modal" data-backdrop="static" data-keyboard="false" ng-click="deleteCustomerRequest(r)">Delete</button></td>
                         </tr>
                         <tr ng-if="!customers || customers.length == 0">
-                            <td colspan="6" style="text-align: center">
+                            <td colspan="8" style="text-align: center">
                                 There are no customers
                             </td>
                         </tr>

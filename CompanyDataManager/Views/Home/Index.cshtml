@@ -47,8 +47,8 @@
                             <div class="form-group">
                                 <label class="control-label col-md-2" for="PhoneNumber">Phone Number</label>
                                 <div class="col-md-10">
-                                    <input class="form-control text-box single-line" ng-model="customer.PhoneNumber" ng-pattern="/^[0-9]*$/" ng-minlength="10" id="PhoneNumber" name="PhoneNumber" type="tel" value="" />
-                                    <span style="color:red" ng-show="addForm.PhoneNumber.$dirty && addForm.PhoneNumber.$invalid">
+                                    <input class="form-control text-box single-line" ng-model="customer.PhoneNumber" ng-pattern="/^[0-9]*$/" ng-minlength="10" id="PhoneNumber" name="PhoneNumber" type="tel" value=""/>
+                                    <span style="color:red" ng-show="addForm.PhoneNumber.$error.$dirty addForm.PhoneNumber.$invalid">
                                         <span ng-show="addForm.PhoneNumber.$error.pattern || addForm.PhoneNumber.$error.minlength">Enter a valid phone number.</span>
                                     </span>
                                 </div>
@@ -223,11 +223,11 @@
                             <td style="text-align:center">
                                 {{r.Email}}
                             </td>
-                            <td><button class="btn btn-link" data-target="#updateModal" data-toggle="modal" data-backdrop="static" data-keyboard="false" ng-click="editCustomer(r.Id)">Edit</button></td>
-                            <td><button class="btn btn-danger" data-target="#deleteModal" data-toggle="modal" data-backdrop="static" data-keyboard="false" ng-click="deleteCustomerRequest(r)">Delete</button></td>
+                            <td style="text-align:center"><button class="btn btn-link" data-target="#updateModal" data-toggle="modal" data-backdrop="static" data-keyboard="false" ng-click="editCustomer(r.Id)">Edit</button></td>
+                            <td style="text-align:center"><button class="btn btn-danger" data-target="#deleteModal" data-toggle="modal" data-backdrop="static" data-keyboard="false" ng-click="deleteCustomerRequest(r)">Delete</button></td>
                         </tr>
                         <tr ng-if="!customers || customers.length == 0">
-                            <td colspan="6" style="text-align: center">
+                            <td colspan="8" style="text-align: center">
                                 There are no customers
                             </td>
                         </tr>

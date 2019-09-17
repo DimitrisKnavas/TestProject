@@ -101,6 +101,7 @@ namespace CompanyDataManagerLibrary.DataAccess
                 }
                 catch
                 {
+                    sql.RollBackTransaction();
                     throw;
                 }
             }

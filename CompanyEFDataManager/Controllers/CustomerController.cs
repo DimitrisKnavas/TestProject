@@ -20,14 +20,15 @@ namespace CompanyEFDataManager.Controllers
             context = new CompanyDataEntities();
         }
         
-        
+        [HttpGet]
         public JsonResult GetCustomers()
         {
             var customers = context.Customers.ToList();
             return Json(customers, JsonRequestBehavior.AllowGet);
         }
 
-        
+
+        [HttpGet]
         public JsonResult Details(int? id)
         {
             var customer = context.Customers.Where(i => i.Id == id).FirstOrDefault();
@@ -50,19 +51,6 @@ namespace CompanyEFDataManager.Controllers
         }
 
         
-        [HttpGet]
-        public async Task<ActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var customer = await context.Customers.FindAsync(id);
-
-            return View(customer);
-        }
-
         
         [HttpPost]
         public ActionResult Edit(Customer customer)
@@ -73,6 +61,7 @@ namespace CompanyEFDataManager.Controllers
             {
                 try
                 {
+                    context.Entry(customerToUpdate).State = EntityState.Modified;
                     context.SaveChanges();
                 }
                 catch (Exception)
@@ -90,8 +79,8 @@ namespace CompanyEFDataManager.Controllers
         {
             try
             {
-                Customer student = context.Customers.Find(id);
-                context.Customers.Remove(student);
+                Customer customer = context.Customers.Find(id);
+                context.Customers.Remove(customer);
                 context.SaveChanges();
             }
             catch (Exception)
